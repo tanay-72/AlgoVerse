@@ -42,5 +42,12 @@ RUN test -f apps/api/dist/main.js || (echo "ERROR: main.js missing from runtime 
 RUN test ! -L node_modules/@algoverse/shared-types || (echo "ERROR: @algoverse/shared-types is still a symlink" && exit 1)
 RUN node -e "require('reflect-metadata'); require('./apps/api/dist/modules/algorithms/dto/query-algorithms.dto.js')" || (echo "ERROR: compiled app cannot resolve @algoverse/shared-types at runtime" && exit 1)
 
+# Stamp the exact build time into the image so /api/health can prove whether a
+# running container is actually serving this image or a stale one.
+RUN date -u +"%Y-%m-%dT%H:%M:%SZ" > apps/api/dist/.built-at && cat apps/api/dist/.built-at
+
 EXPOSE 4000
-CMD ["node", "apps/api/dist/main.js"]
+# Print the build marker and a directory listing of the shared-types package
+# before starting node, so this is visible in deploy logs even if node
+# crashes immediately during module loading.
+CMD ["sh", "-c", "echo \"IMAGE BUILT AT: $(cat apps/api/dist/.built-at)\"; echo 'node_modules/@algoverse/shared-types contents:'; find node_modules/@algoverse/shared-types; exec node apps/api/dist/main.js"]
