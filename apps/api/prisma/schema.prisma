@@ -1,0 +1,142 @@
+// AlgoVerse database schema.
+// Run `npm run db:generate` after editing this file, and
+// `npm run db:migrate` to create/apply a migration.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Difficulty {
+  EASY
+  MEDIUM
+  HARD
+}
+
+enum Platform {
+  LEETCODE
+  CODEFORCES
+  CSES
+  ATCODER
+  OTHER
+}
+
+model Category {
+  id          String      @id @default(cuid())
+  slug        String      @unique
+  name        String
+  description String
+  icon        String
+  order       Int         @default(0)
+  algorithms  Algorithm[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  @@map("categories")
+}
+
+model Algorithm {
+  id         String     @id @default(cuid())
+  slug       String     @unique
+  name       String
+  summary    String
+  difficulty Difficulty
+
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+
+  introduction     String @db.Text
+  problemStatement String @db.Text
+  intuition        String @db.Text
+  stepByStep       String[]
+  dryRun           String @db.Text
+
+  timeComplexityBest    String
+  timeComplexityAverage String
+  timeComplexityWorst   String
+  spaceComplexity       String
+
+  advantages         String[]
+  disadvantages       String[]
+  applications        String[]
+  commonMistakes      String[]
+  visualizationNotes  String @db.Text
+
+  tags String[]
+
+  cppCode    String @db.Text
+  pythonCode String @db.Text
+
+  practiceProblems PracticeProblem[]
+  externalLinks    ExternalLink[]
+
+  relatedFrom RelatedAlgorithm[] @relation("AlgorithmToRelated")
+  relatedTo   RelatedAlgorithm[] @relation("RelatedToAlgorithm")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([categoryId])
+  @@index([difficulty])
+  @@map("algorithms")
+}
+
+/// Explicit join model for the self-referential many-to-many "related algorithms" graph.
+model RelatedAlgorithm {
+  id String @id @default(cuid())
+
+  algorithmId String
+  algorithm   Algorithm @relation("AlgorithmToRelated", fields: [algorithmId], references: [id], onDelete: Cascade)
+
+  relatedId String
+  related   Algorithm @relation("RelatedToAlgorithm", fields: [relatedId], references: [id], onDelete: Cascade)
+
+  @@unique([algorithmId, relatedId])
+  @@map("related_algorithms")
+}
+
+model PracticeProblem {
+  id String @id @default(cuid())
+
+  algorithmId String
+  algorithm   Algorithm @relation(fields: [algorithmId], references: [id], onDelete: Cascade)
+
+  title      String
+  url        String
+  platform   Platform
+  difficulty Difficulty
+
+  @@index([algorithmId])
+  @@map("practice_problems")
+}
+
+model ExternalLink {
+  id String @id @default(cuid())
+
+  algorithmId String
+  algorithm   Algorithm @relation(fields: [algorithmId], references: [id], onDelete: Cascade)
+
+  platform Platform
+  label    String
+  url      String
+
+  @@index([algorithmId])
+  @@map("external_links")
+}
+
+/// Standalone educational reference used by the "Complexity Reference" page —
+/// independent of any single algorithm.
+model ComplexityReference {
+  id          String @id @default(cuid())
+  notation    String @unique
+  name        String
+  description String @db.Text
+  example     String
+  order       Int    @default(0)
+
+  @@map("complexity_references")
+}

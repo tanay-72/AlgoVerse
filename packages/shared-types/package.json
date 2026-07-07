@@ -1,0 +1,17 @@
+{
+  "name": "@algoverse/shared-types",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Shared TypeScript types and contracts between the AlgoVerse API and web app.",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "type-check": "tsc --noEmit",
+    "lint": "eslint . --max-warnings=0",
+    "clean": "rm -rf dist .turbo"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.4"
+  }
+}
