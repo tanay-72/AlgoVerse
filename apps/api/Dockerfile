@@ -19,6 +19,7 @@ COPY . .
 RUN npm run db:generate --workspace=apps/api
 RUN npm run build --workspace=@algoverse/shared-types --if-present
 RUN npm run build --workspace=apps/api
+RUN test -f apps/api/dist/main.js || (echo "ERROR: nest build did not produce apps/api/dist/main.js" && exit 1)
 
 # ---- runtime: minimal production image ----
 FROM base AS runtime
@@ -27,6 +28,7 @@ COPY --from=build /repo/node_modules ./node_modules
 COPY --from=build /repo/apps/api/dist ./apps/api/dist
 COPY --from=build /repo/apps/api/prisma ./apps/api/prisma
 COPY --from=build /repo/apps/api/package.json ./apps/api/package.json
+RUN test -f apps/api/dist/main.js || (echo "ERROR: main.js missing from runtime image after COPY" && exit 1)
 
 EXPOSE 4000
 CMD ["node", "apps/api/dist/main.js"]
