@@ -3,6 +3,12 @@
 FROM node:20-alpine AS base
 WORKDIR /repo
 RUN corepack enable
+# Prisma's query engine binary is a native addon linked against OpenSSL.
+# Alpine's base image ships neither by default, and Prisma has previously
+# guessed the wrong OpenSSL version to target without it — install it
+# explicitly so `prisma generate` picks the right binary target and the
+# engine can actually load at runtime.
+RUN apk add --no-cache openssl
 
 # ---- deps: install full workspace dependencies ----
 FROM base AS deps
@@ -47,7 +53,4 @@ RUN node -e "require('reflect-metadata'); require('./apps/api/dist/modules/algor
 RUN date -u +"%Y-%m-%dT%H:%M:%SZ" > apps/api/dist/.built-at && cat apps/api/dist/.built-at
 
 EXPOSE 4000
-# Print the build marker and a directory listing of the shared-types package
-# before starting node, so this is visible in deploy logs even if node
-# crashes immediately during module loading.
-CMD ["sh", "-c", "echo \"IMAGE BUILT AT: $(cat apps/api/dist/.built-at)\"; echo 'node_modules/@algoverse/shared-types contents:'; find node_modules/@algoverse/shared-types; exec node apps/api/dist/main.js"]
+CMD ["sh", "-c", "echo \"IMAGE BUILT AT: $(cat apps/api/dist/.built-at)\"; exec node apps/api/dist/main.js"]
