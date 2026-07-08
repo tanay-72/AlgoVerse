@@ -3,17 +3,21 @@ import type { AlgorithmSummary } from '@algoverse/shared-types';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { getCategoryIcon } from '@/lib/utils/icon-map';
+import { getCategoryColor } from '@/lib/utils/category-colors';
 import { DifficultyBadge } from './difficulty-badge';
 
 export function AlgorithmCard({ algorithm }: { algorithm: AlgorithmSummary }) {
   const Icon = getCategoryIcon(algorithm.category.icon);
+  const color = getCategoryColor(algorithm.category.slug);
 
   return (
     <Link href={`/algorithms/${algorithm.slug}`} className="group block h-full">
-      <Card className="flex h-full flex-col transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-md">
+      <Card
+        className={`flex h-full flex-col transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md ${color.border}`}
+      >
         <CardHeader className="gap-3">
           <div className="flex items-center justify-between">
-            <span className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
+            <span className={`flex items-center gap-1.5 text-xs font-medium ${color.text}`}>
               <Icon className="h-3.5 w-3.5" />
               {algorithm.category.name}
             </span>

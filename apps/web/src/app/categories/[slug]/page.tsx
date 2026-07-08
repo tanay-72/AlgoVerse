@@ -4,6 +4,7 @@ import { fetchCategoryBySlug } from '@/lib/api/categories';
 import { fetchAlgorithms } from '@/lib/api/algorithms';
 import { AlgorithmList } from '@/components/algorithm/algorithm-list';
 import { getCategoryIcon } from '@/lib/utils/icon-map';
+import { getCategoryColor } from '@/lib/utils/category-colors';
 import { ApiError } from '@/lib/api/client';
 
 export const dynamic = 'force-dynamic';
@@ -32,11 +33,14 @@ export default async function CategoryDetailPage({ params }: CategoryPageProps) 
 
   const { items: algorithms } = await fetchAlgorithms({ category: category.slug, pageSize: 50 });
   const Icon = getCategoryIcon(category.icon);
+  const color = getCategoryColor(category.slug);
 
   return (
     <div className="container py-10">
       <div className="flex items-start gap-4">
-        <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+        <span
+          className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl ${color.bg} ${color.text}`}
+        >
           <Icon className="h-6 w-6" />
         </span>
         <div>

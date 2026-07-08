@@ -1,18 +1,20 @@
 'use client';
 
-import { BookOpen, Layers, Sparkles, Trophy } from 'lucide-react';
+import { BookOpen, Layers, Sparkles, Sigma } from 'lucide-react';
 import { useCategories } from '@/lib/query/use-categories';
 import { useAlgorithms } from '@/lib/query/use-algorithms';
+import { useComplexityReferences } from '@/lib/query/use-complexities';
 
 export function StatsSection() {
   const { data: categories } = useCategories();
   const { data: algorithms } = useAlgorithms({ pageSize: 1 });
+  const { data: complexities } = useComplexityReferences();
 
   const stats = [
     { label: 'Algorithms', value: algorithms?.meta.total ?? '—', icon: BookOpen },
     { label: 'Categories', value: categories?.length ?? '—', icon: Layers },
     { label: 'Languages per Algorithm', value: 2, icon: Sparkles },
-    { label: 'Sign-ups Required', value: 0, icon: Trophy },
+    { label: 'Complexity Guides', value: complexities?.length ?? '—', icon: Sigma },
   ];
 
   return (
