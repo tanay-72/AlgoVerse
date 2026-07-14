@@ -43,3 +43,6 @@ Thumbs.db
 # Misc
 *.tsbuildinfo
 .eslintcache
+
+# Personal interview prep (not project documentation)
+INTERVIEW_GUIDE.md

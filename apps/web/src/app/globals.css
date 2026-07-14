@@ -12,7 +12,7 @@
   --popover: 0 0% 100%;
   --popover-foreground: 240 10% 3.9%;
 
-  --primary: 243 75% 59%;
+  --primary: 142 76% 36%;
   --primary-foreground: 0 0% 100%;
 
   --secondary: 240 4.8% 95.9%;
@@ -35,7 +35,7 @@
 
   --border: 240 5.9% 90%;
   --input: 240 5.9% 90%;
-  --ring: 243 75% 59%;
+  --ring: 142 76% 36%;
 
   --radius: 0.75rem;
 
@@ -57,7 +57,7 @@
   --popover: 240 8% 7%;
   --popover-foreground: 0 0% 98%;
 
-  --primary: 243 82% 70%;
+  --primary: 142 72% 45%;
   --primary-foreground: 240 10% 4%;
 
   --secondary: 240 4% 15.5%;
@@ -80,7 +80,7 @@
 
   --border: 240 4% 17%;
   --input: 240 4% 17%;
-  --ring: 243 82% 70%;
+  --ring: 142 72% 45%;
 }
 
 @layer base {
@@ -152,4 +152,39 @@
   color: var(--shiki-dark);
   background-color: var(--shiki-dark-bg);
 }
+
+/* Custom premium glow effects and decorative elements */
+.glow-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  opacity: 0.12;
+  transition: opacity 0.5s ease;
+}
+
+.dark .glow-orb {
+  opacity: 0.22;
+}
+
+.glass-panel {
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.dark .glass-panel {
+  background: rgba(255, 255, 255, 0.015);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+/* Light beams or grid overlays */
+.light-beam {
+  position: absolute;
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, hsl(var(--primary) / 0.12), transparent);
+  pointer-events: none;
+}
+
 

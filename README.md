@@ -49,7 +49,7 @@ AlgoVerse/
 │   │   └── public/
 │   └── api/                      # NestJS REST API
 │       ├── src/
-│       │   ├── modules/          # algorithms/, categories/, complexities/, search/ — each: controller → service → repository → dto → mapper
+│       │   ├── modules/          # algorithms/, categories/, complexities/, search/ — each: controller → service → repository → dto →  mapper
 │       │   ├── common/           # response envelope, exception filter, pagination DTO, shared exceptions
 │       │   ├── config/           # typed configuration + env validation
 │       │   └── database/         # PrismaService / PrismaModule
