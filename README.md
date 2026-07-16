@@ -1,6 +1,6 @@
 # AlgoVerse
 
-A premium, sign-up-free Data Structures & Algorithms learning platform. AlgoVerse pairs a clean,
+A premium, sign-up-free Data Structures and Algorithms learning platform. AlgoVerse pairs a clean,
 Vercel/Linear-inspired interface with in-depth, hand-written algorithm content: intuition, dry
 runs, complexity analysis, dual-language implementations, and curated practice problems — with no
 authentication, no accounts, and no backend user state. Bookmarks, progress, recently viewed
