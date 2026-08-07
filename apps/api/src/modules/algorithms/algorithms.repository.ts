@@ -3,7 +3,7 @@ import { Prisma } from '@prisma/client';
 import { PrismaService } from '../../database/prisma.service';
 import { QueryAlgorithmsDto } from './dto/query-algorithms.dto';
 
-const summarySelect = Prisma.validator<Prisma.AlgorithmSelect>()({
+const summarySelect = {
   id: true,
   slug: true,
   name: true,
@@ -13,11 +13,11 @@ const summarySelect = Prisma.validator<Prisma.AlgorithmSelect>()({
   timeComplexityAverage: true,
   spaceComplexity: true,
   category: { select: { id: true, slug: true, name: true, icon: true } },
-});
+} satisfies Prisma.AlgorithmSelect;
 
 export type AlgorithmSummaryRecord = Prisma.AlgorithmGetPayload<{ select: typeof summarySelect }>;
 
-const detailInclude = Prisma.validator<Prisma.AlgorithmInclude>()({
+const detailInclude = {
   category: { select: { id: true, slug: true, name: true, icon: true } },
   practiceProblems: true,
   externalLinks: true,
@@ -26,7 +26,7 @@ const detailInclude = Prisma.validator<Prisma.AlgorithmInclude>()({
       related: { select: summarySelect },
     },
   },
-});
+} satisfies Prisma.AlgorithmInclude;
 
 export type AlgorithmDetailRecord = Prisma.AlgorithmGetPayload<{ include: typeof detailInclude }>;
 
