@@ -53,4 +53,4 @@ RUN node -e "require('reflect-metadata'); require('./apps/api/dist/modules/algor
 RUN date -u +"%Y-%m-%dT%H:%M:%SZ" > apps/api/dist/.built-at && cat apps/api/dist/.built-at
 
 EXPOSE 4000
-CMD ["sh", "-c", "echo \"IMAGE BUILT AT: $(cat apps/api/dist/.built-at)\"; exec node apps/api/dist/main.js"]
+CMD ["sh", "-c", "echo \"IMAGE BUILT AT: $(cat apps/api/dist/.built-at)\"; npx prisma migrate deploy && exec node apps/api/dist/main.js"]
