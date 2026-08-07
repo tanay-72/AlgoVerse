@@ -20,8 +20,10 @@ export function configureApp(app: INestApplication): void {
   app.useGlobalInterceptors(new ResponseInterceptor());
 
   const corsOrigin = process.env.CORS_ORIGIN ?? 'http://localhost:3000';
+  const origins = corsOrigin.split(',').map((origin) => origin.trim());
+
   app.enableCors({
-    origin: corsOrigin.split(',').map((origin) => origin.trim()),
+    origin: origins.includes('*') ? true : origins,
     credentials: true,
   });
 }
